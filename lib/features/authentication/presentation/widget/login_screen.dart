@@ -1,12 +1,15 @@
 import 'package:fishtrack/features/authentication/domain/entities/user_entity.dart';
 import 'package:fishtrack/features/authentication/presentation/bloc/auth_bloc.dart';
+import 'package:fishtrack/features/authentication/presentation/widget/register_screen.dart';
 import 'package:fishtrack/features/authentication/presentation/widget/social_login_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../core/routes/app_routes.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/common_button.dart';
 import '../../../../core/widgets/common_text_field.dart';
+import '../screen/RegisterScreen.dart';
 
 
 class LoginWidget extends StatefulWidget {
@@ -88,7 +91,10 @@ class _LoginWidgetState extends State<LoginWidget> {
   }
 
   void _createAccount() {
-    // TODO: Navigate to registration screen
+    Navigator.pushNamed(
+      context,
+      RegisterScreen.routeName,
+    );
   }
 
   @override
@@ -104,10 +110,13 @@ class _LoginWidgetState extends State<LoginWidget> {
 
             switch (user.role) {
               case UserRole.fisherman:
-                Navigator.pushReplacementNamed(
-                  context,
-                  '/fisherman-home',
-                );
+                if (state.user?.role == UserRole.fisherman) {
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    AppRoutes.fishermanDashboard,
+                        (route) => false,
+                  );
+                }
                 break;
 
               case UserRole.vendor:

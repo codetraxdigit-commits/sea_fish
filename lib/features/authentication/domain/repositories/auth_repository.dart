@@ -6,6 +6,13 @@ abstract class AuthRepository {
     required String password,
   });
 
+  Future<UserEntity> register({
+    required String name,
+    required String email,
+    required String password,
+    required String role,
+  });
+
   Future<void> logout();
 
   Future<UserEntity?> getCurrentUser();
