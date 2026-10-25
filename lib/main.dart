@@ -4,6 +4,11 @@ import 'package:fishtrack/features/boat/presentation/bloc/boat_bloc.dart';
 import 'package:fishtrack/features/boat/presentation/pages/add_boat_screen.dart';
 import 'package:fishtrack/features/boat/presentation/pages/my_boat_screen.dart';
 import 'package:fishtrack/features/dashboard/presentation/pages/fisherman_dashboard_screen.dart';
+import 'package:fishtrack/features/fishing_trip/presentation/bloc/fishing_trip_bloc.dart';
+import 'package:fishtrack/features/fishing_trip/presentation/bloc/fishing_trip_event.dart';
+import 'package:fishtrack/features/fishing_trip/presentation/pages/fishing_trip_history_screen.dart';
+import 'package:fishtrack/features/fishing_trip/presentation/pages/fishing_trip_screen.dart';
+import 'package:fishtrack/features/fishing_trip/presentation/pages/start_fishing_trip_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -34,50 +39,57 @@ class SeaLinkApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme,
-      initialRoute: '/',
-      routes: {
-        '/': (context) => const SplashScreen(),
+    return
+      MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'FishTrack',
 
-        OnboardingScreen.routeName: (context) =>
-        const OnboardingScreen(),
+        home: const OnboardingScreen(),
 
-        LoginScreen.routeName: (context) =>
-        const LoginScreen(),
+        routes: {
+          OnboardingScreen.routeName: (context) =>
+          const OnboardingScreen(),
 
-        RegisterScreen.routeName: (context) =>
-        const RegisterScreen(),
+          LoginScreen.routeName: (context) =>
+          const LoginScreen(),
 
-        AppRoutes.fishermanDashboard: (context) =>
-            BlocProvider<DashboardBloc>(
-              create: (_) => sl<DashboardBloc>(),
-              child: const FishermanDashboardScreen(),
-            ),
+          RegisterScreen.routeName: (context) =>
+          const RegisterScreen(),
 
+          AppRoutes.fishermanDashboard: (context) =>
+              BlocProvider(
+                create: (_) => sl<DashboardBloc>(),
+                child: const FishermanDashboardScreen(),
+              ),
 
-        AppRoutes.addBoat: (context) =>
-            BlocProvider<BoatBloc>(
-              create: (_) => sl<BoatBloc>(),
-              child: const AddBoatScreen(),
-            ),
+          AppRoutes.addBoat: (context) =>
+              BlocProvider(
+                create: (_) => sl<BoatBloc>(),
+                child: const AddBoatScreen(),
+              ),
 
-        AppRoutes.myBoat: (context) =>
-            BlocProvider<BoatBloc>(
-              create: (_) => sl<BoatBloc>(),
-              child: const MyBoatScreen(),
-            ),
+          AppRoutes.myBoat: (context) =>
+              BlocProvider(
+                create: (_) => sl<BoatBloc>()
+                  ..add(const BoatFetchRequested()),
+                child: const MyBoatScreen(),
+              ),
 
-        // '/fisherman-home': (context) =>
-        // const FishermanHomeScreen(),
-        //
-        // '/vendor-home': (context) =>
-        // const VendorHomeScreen(),
-        //
-        // '/admin-home': (context) =>
-        // const AdminHomeScreen(),
-      },
-    );
+          // ✅ ADD THIS
+          AppRoutes.fishingTrip: (context) =>
+              BlocProvider<FishingTripBloc>(
+                create: (_) => sl<FishingTripBloc>()
+                  ..add(const FishingTripFetchActiveRequested()),
+                child: const FishingTripScreen(),
+              ),
+
+          AppRoutes.fishingTripHistory: (context) =>
+              BlocProvider<FishingTripBloc>(
+                create: (_) => sl<FishingTripBloc>()
+                  ..add(const FishingTripHistoryRequested()),
+                child: const FishingTripHistoryScreen(),
+              ),
+        },
+      );
   }
 }

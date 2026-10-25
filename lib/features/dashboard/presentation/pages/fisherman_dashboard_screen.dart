@@ -445,10 +445,9 @@ class _FishermanDashboardScreenState
   }
 
   void _openTrips() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Fishing trips coming next.'),
-      ),
+    Navigator.pushNamed(
+      context,
+      AppRoutes.fishingTrip,
     );
   }
 
